@@ -9,7 +9,7 @@ import { palette } from '@/theme/tokens';
 
 const STEPS = [
   { index: '01', text: 'When you want a feed, open PauseGate first.' },
-  { index: '02', text: 'A short timer runs with a small habit stack.' },
+  { index: '02', text: 'A short timer runs, with a few small things you can do while you wait.' },
   { index: '03', text: 'When it ends, open the feed or stay. The pause counts either way.' },
 ];
 
@@ -39,20 +39,19 @@ export default function OnboardingScreen() {
         <Mark size={64} />
         {page === 0 ? (
           <View style={styles.copy}>
-            <Text style={styles.eyebrow}>Soft gate</Text>
+            <Text style={styles.eyebrow}>Before the feed</Text>
             <Text style={styles.title}>Pause, then decide.</Text>
             <Text style={styles.bodyText}>
-              A short wait makes the urge to scroll easier to notice. PauseGate holds that wait with
-              you. When it ends, you can still open the feed. Nothing is blocked.
+              A short wait makes the urge to scroll easier to notice. PauseGate waits with you.
+              When the timer ends, you can still open the feed.
             </Text>
           </View>
         ) : (
           <View style={styles.copy}>
-            <Text style={styles.eyebrow}>On this device</Text>
-            <Text style={styles.title}>Nothing leaves the phone.</Text>
+            <Text style={styles.eyebrow}>On your phone</Text>
+            <Text style={styles.title}>It stays here.</Text>
             <Text style={styles.bodyText}>
-              No account and no cloud. Pauses, habits, and your streak stay in local storage, and
-              the app works offline.
+              No account. Your pauses, prompts, and streak stay on this phone.
             </Text>
             <View style={styles.steps}>
               {STEPS.map((step) => (

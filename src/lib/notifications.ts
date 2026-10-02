@@ -27,12 +27,7 @@ export async function syncReminder(
   options: { requestPermission: boolean },
 ): Promise<ReminderSync> {
   if (Platform.OS === 'web') {
-    return {
-      enabled: false,
-      message: settings.remindersEnabled
-        ? 'Reminders are available in the iOS and Android apps.'
-        : null,
-    };
+    return { enabled: false, message: null };
   }
 
   try {

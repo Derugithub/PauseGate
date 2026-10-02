@@ -1,5 +1,5 @@
-import { Redirect } from 'expo-router';
-import { useState } from 'react';
+import { Redirect, router, useNavigation } from 'expo-router';
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { KeyboardAvoidingView, Platform, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 
 import { Button, Card, Screen } from '@/components/ui';
@@ -8,7 +8,48 @@ import { useApp } from '@/state/store';
 import { palette, radius } from '@/theme/tokens';
 
 export default function HabitsScreen() {
+  const navigation = useNavigation();
   const { ready, state, renameHabit, addHabit, removeHabit, setHabitEnabled } = useApp();
+  const drafts = useRef(new Map<string, string>());
+  const renameRef = useRef(renameHabit);
+  useEffect(() => {
+    renameRef.current = renameHabit;
+  }, [renameHabit]);
+
+  const flush = useCallback(() => {
+    for (const [id, label] of drafts.current) {
+      void renameRef.current(id, label);
+    }
+  }, []);
+
+  const finish = useCallback(() => {
+    flush();
+    router.back();
+  }, [flush]);
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('beforeRemove', () => {
+      flush();
+    });
+    return unsubscribe;
+  }, [flush, navigation]);
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel="Done"
+          onPress={finish}
+          hitSlop={12}
+          testID="habits-done-header"
+          style={styles.headerDone}>
+          <Text style={styles.headerDoneLabel}>Done</Text>
+        </Pressable>
+      ),
+    });
+  }, [finish, navigation]);
+
   if (ready && !state.settings.onboardingComplete) {
     return <Redirect href="/onboarding" />;
   }
@@ -17,17 +58,21 @@ export default function HabitsScreen() {
 
   return (
     <KeyboardAvoidingView style={styles.flex} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
-      <Screen topInset={false}>
+      <Screen
+        topInset={false}
+        footer={<Button label="Done" onPress={finish} testID="habits-done" />}>
         <Text style={styles.intro}>
-          Turn prompts on or off, rename them, or add your own. The next pause uses whatever is on.
+          Rename a prompt, turn it on or off, or add your own. The next pause uses whatever is on.
         </Text>
         <Card>
           {state.habits.map((habit, index) => (
             <View key={habit.id} style={index > 0 ? styles.divided : undefined}>
               <HabitField
-                key={`${habit.id}:${habit.label}`}
                 habit={habit}
-                onRename={(label) => void renameHabit(habit.id, label)}
+                onDraft={(label) => {
+                  drafts.current.set(habit.id, label);
+                  void renameHabit(habit.id, label);
+                }}
                 onToggle={(enabled) => void setHabitEnabled(habit.id, enabled)}
                 onRemove={habit.builtIn ? undefined : () => void removeHabit(habit.id)}
               />
@@ -35,7 +80,7 @@ export default function HabitsScreen() {
           ))}
         </Card>
         {atLimit ? (
-          <Text style={styles.limit}>Eight prompts is the stack limit.</Text>
+          <Text style={styles.limit}>Eight prompts is the limit.</Text>
         ) : (
           <Button label="Add a prompt" variant="ghost" onPress={() => void addHabit()} testID="add-habit" />
         )}
@@ -46,38 +91,35 @@ export default function HabitsScreen() {
 
 function HabitField({
   habit,
-  onRename,
+  onDraft,
   onToggle,
   onRemove,
 }: {
   habit: Habit;
-  onRename: (label: string) => void;
+  onDraft: (label: string) => void;
   onToggle: (enabled: boolean) => void;
   onRemove?: () => void;
 }) {
   const [label, setLabel] = useState(habit.label);
 
-  function commit() {
-    const trimmed = label.trim();
-    if (!trimmed) {
-      setLabel(habit.label);
-      return;
-    }
-    if (trimmed !== habit.label) onRename(trimmed);
+  function change(next: string) {
+    setLabel(next);
+    onDraft(next);
   }
 
   return (
     <View style={styles.field}>
       <TextInput
         value={label}
-        onChangeText={setLabel}
-        onEndEditing={commit}
-        onSubmitEditing={commit}
+        onChangeText={change}
+        onEndEditing={() => onDraft(label)}
+        onSubmitEditing={() => onDraft(label)}
         maxLength={MAX_LABEL_LENGTH}
         placeholder="Prompt"
         placeholderTextColor={palette.textFaint}
         style={[styles.input, !habit.enabled && styles.inputOff]}
         accessibilityLabel={`Prompt ${habit.label}`}
+        testID={`habit-label-${habit.id}`}
       />
       <View style={styles.fieldActions}>
         <Pressable
@@ -104,6 +146,15 @@ const styles = StyleSheet.create({
   flex: {
     flex: 1,
     backgroundColor: palette.bg,
+  },
+  headerDone: {
+    paddingHorizontal: 8,
+    paddingVertical: 6,
+  },
+  headerDoneLabel: {
+    color: palette.accent,
+    fontSize: 16,
+    fontWeight: '600',
   },
   intro: {
     color: palette.textMuted,

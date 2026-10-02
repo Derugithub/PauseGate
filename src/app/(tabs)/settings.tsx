@@ -1,5 +1,5 @@
 import { router } from 'expo-router';
-import { Alert, Pressable, StyleSheet, Text, View } from 'react-native';
+import { Alert, Platform, Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { Button, Card, Screen, SectionLabel, ToggleRow } from '@/components/ui';
 import { formatClock, shiftReminder } from '@/lib/format';
@@ -91,34 +91,36 @@ export default function SettingsScreen() {
         </Card>
       </View>
 
-      <View style={styles.group}>
-        <SectionLabel>Reminder</SectionLabel>
-        <Card>
-          <ToggleRow
-            title="Daily reminder"
-            subtitle="A local notification. Nothing is sent to a server."
-            value={settings.remindersEnabled}
-            onValueChange={(enabled) => void setReminders(enabled)}
-            testID="reminder-toggle"
-          />
-          {settings.remindersEnabled ? (
-            <View style={styles.timeBlock}>
-              <Text style={styles.clock} testID="reminder-clock">
-                {formatClock(settings.reminderHour, settings.reminderMinute)}
-              </Text>
-              <View style={styles.timeRow}>
-                <Button label="− hour" variant="ghost" onPress={() => moveTime(-60)} style={styles.timeButton} />
-                <Button label="+ hour" variant="ghost" onPress={() => moveTime(60)} style={styles.timeButton} />
+      {Platform.OS === 'web' ? null : (
+        <View style={styles.group}>
+          <SectionLabel>Reminder</SectionLabel>
+          <Card>
+            <ToggleRow
+              title="Daily reminder"
+              subtitle="A gentle nudge, once a day."
+              value={settings.remindersEnabled}
+              onValueChange={(enabled) => void setReminders(enabled)}
+              testID="reminder-toggle"
+            />
+            {settings.remindersEnabled ? (
+              <View style={styles.timeBlock}>
+                <Text style={styles.clock} testID="reminder-clock">
+                  {formatClock(settings.reminderHour, settings.reminderMinute)}
+                </Text>
+                <View style={styles.timeRow}>
+                  <Button label="− hour" variant="ghost" onPress={() => moveTime(-60)} style={styles.timeButton} />
+                  <Button label="+ hour" variant="ghost" onPress={() => moveTime(60)} style={styles.timeButton} />
+                </View>
+                <View style={styles.timeRow}>
+                  <Button label="− 15 min" variant="ghost" onPress={() => moveTime(-15)} style={styles.timeButton} />
+                  <Button label="+ 15 min" variant="ghost" onPress={() => moveTime(15)} style={styles.timeButton} />
+                </View>
               </View>
-              <View style={styles.timeRow}>
-                <Button label="− 15 min" variant="ghost" onPress={() => moveTime(-15)} style={styles.timeButton} />
-                <Button label="+ 15 min" variant="ghost" onPress={() => moveTime(15)} style={styles.timeButton} />
-              </View>
-            </View>
-          ) : null}
-          {reminderNote ? <Text style={styles.help}>{reminderNote}</Text> : null}
-        </Card>
-      </View>
+            ) : null}
+            {reminderNote ? <Text style={styles.help}>{reminderNote}</Text> : null}
+          </Card>
+        </View>
+      )}
 
       <View style={styles.group}>
         <SectionLabel>Haptics</SectionLabel>
@@ -137,8 +139,8 @@ export default function SettingsScreen() {
         <SectionLabel>About</SectionLabel>
         <Card>
           <Text style={styles.about}>
-            PauseGate is a soft gate. It does not block, close, or filter other apps. When the timer
-            ends, opening the feed is still up to you. Your pauses stay on this device.
+            PauseGate does not block or close other apps. When the timer ends, opening the feed
+            is still up to you. Your pauses stay on this phone.
           </Text>
         </Card>
       </View>

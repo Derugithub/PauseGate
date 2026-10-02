@@ -270,6 +270,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
         enqueue(async () => {
           const trimmed = label.trim().slice(0, MAX_LABEL_LENGTH);
           if (!trimmed) return;
+          const current = stateRef.current.habits.find((habit) => habit.id === habitId);
+          if (!current || current.label === trimmed) return;
           await commit({
             ...stateRef.current,
             habits: stateRef.current.habits.map((habit) =>
