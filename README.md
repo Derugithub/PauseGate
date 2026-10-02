@@ -37,12 +37,12 @@ Unit tests cover streak day counting (including “today is still open” and ti
 
 ## Brand assets
 
-The icon and splash are placeholders. Replace them with a brand pack later:
+The icon and splash are the PauseGate brand pack:
 
 | Path | Use |
 | --- | --- |
 | `assets/images/icon.png` | 1024×1024 app icon |
-| `assets/images/splash-icon.png` | Splash mark on `#101413` |
+| `assets/images/splash-icon.png` | Splash mark on `#0C0F12` |
 | `assets/images/android-icon-foreground.png` | Android adaptive foreground |
 | `assets/images/android-icon-background.png` | Android adaptive background |
 | `assets/images/android-icon-monochrome.png` | Android themed icon |
