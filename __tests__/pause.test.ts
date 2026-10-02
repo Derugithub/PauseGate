@@ -15,7 +15,7 @@ import {
   streakCreditTimestamp,
 } from '../src/lib/pause.ts';
 import { defaultState, sanitizeState } from '../src/lib/persist.ts';
-import { completionDateKeys, withCompletion } from '../src/lib/records.ts';
+import { completionDateKeys, completionRedirectId, withCompletion } from '../src/lib/records.ts';
 import { dateKeyFromTimestamp } from '../src/lib/streaks.ts';
 
 describe('pause duration', () => {
@@ -166,5 +166,45 @@ describe('recording a pause', () => {
     assert.deepEqual(completionDateKeys(recorded.sessions, 'UTC'), [
       dateKeyFromTimestamp(endsAt + 30_000, 'UTC'),
     ]);
+  });
+});
+
+describe('completion redirect', () => {
+  const session = {
+    id: 'pause-1',
+    completedAt: 1_000_000,
+    checkIn: null,
+  };
+
+  it('opens the completion moment when the running pause is logged', () => {
+    assert.equal(
+      completionRedirectId('pause-1', { active: null, sessions: [session] }, session.completedAt),
+      'pause-1',
+    );
+  });
+
+  it('stays on a new pause when the previous one was logged in the same update', () => {
+    assert.equal(
+      completionRedirectId('pause-1', { active: { id: 'pause-2' }, sessions: [session] }, session.completedAt),
+      null,
+    );
+  });
+
+  it('shows a pause that was logged while the app was closed', () => {
+    assert.equal(
+      completionRedirectId(undefined, { active: null, sessions: [session] }, session.completedAt + 1000),
+      'pause-1',
+    );
+  });
+
+  it('does not reopen an older pause that was already left', () => {
+    assert.equal(
+      completionRedirectId(undefined, { active: null, sessions: [session] }, session.completedAt + 60_000),
+      null,
+    );
+    assert.equal(
+      completionRedirectId(null, { active: null, sessions: [{ ...session, checkIn: 'stayed' }] }, session.completedAt),
+      null,
+    );
   });
 });

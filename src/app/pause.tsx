@@ -13,10 +13,12 @@ export default function PauseScreen() {
   const { ready, state, toggleActiveHabit } = useApp();
   const active = state.active;
   const now = useNow(true);
-  const watchedId = useRef<string | null>(active?.id ?? null);
+  const watchedId = useRef<string | null>(null);
   const left = useRef(false);
 
-  if (active && !watchedId.current) watchedId.current = active.id;
+  useEffect(() => {
+    if (active) watchedId.current = active.id;
+  }, [active]);
 
   useEffect(() => {
     if (!ready || left.current || active) return;

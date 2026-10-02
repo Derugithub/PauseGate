@@ -5,7 +5,7 @@ import { Button, Card, Screen, SectionLabel, ToggleRow } from '@/components/ui';
 import { formatClock, shiftReminder } from '@/lib/format';
 import { MAX_PAUSE_SECONDS, MIN_PAUSE_SECONDS, PAUSE_STEP_SECONDS } from '@/lib/pause';
 import { useApp } from '@/state/store';
-import { palette, radius } from '@/theme/tokens';
+import { palette } from '@/theme/tokens';
 
 export default function SettingsScreen() {
   const {

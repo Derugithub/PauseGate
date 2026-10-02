@@ -1,10 +1,11 @@
-import { DarkTheme, Stack, ThemeProvider } from 'expo-router';
+import { DarkTheme, Stack, ThemeProvider, router, useGlobalSearchParams, usePathname } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import * as SystemUI from 'expo-system-ui';
 import { StatusBar } from 'expo-status-bar';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { View } from 'react-native';
 
+import { completionRedirectId } from '@/lib/records';
 import { AppProvider, useApp } from '@/state/store';
 import { palette } from '@/theme/tokens';
 
@@ -25,6 +26,25 @@ const navigationTheme = {
   },
 };
 
+function CompletionGate() {
+  const { ready, state } = useApp();
+  const pathname = usePathname();
+  const params = useGlobalSearchParams<{ id?: string | string[] }>();
+  const previousActiveId = useRef<string | null | undefined>(undefined);
+
+  useEffect(() => {
+    if (!ready || !state.settings.onboardingComplete) return;
+    const id = completionRedirectId(previousActiveId.current, state, Date.now());
+    previousActiveId.current = state.active?.id ?? null;
+    if (!id) return;
+    const currentId = Array.isArray(params.id) ? params.id[0] : params.id;
+    if (pathname === '/complete' && currentId === id) return;
+    router.replace({ pathname: '/complete', params: { id } });
+  }, [params.id, pathname, ready, state]);
+
+  return null;
+}
+
 function RootNavigator() {
   const { ready, state } = useApp();
 
@@ -42,7 +62,9 @@ function RootNavigator() {
   }
 
   return (
-    <Stack
+    <>
+      <CompletionGate />
+      <Stack
       initialRouteName={state.settings.onboardingComplete ? '(tabs)' : 'onboarding'}
       screenOptions={{
         headerShown: false,
@@ -66,6 +88,7 @@ function RootNavigator() {
         }}
       />
     </Stack>
+    </>
   );
 }
 

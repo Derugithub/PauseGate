@@ -31,7 +31,7 @@ export default function CompleteScreen() {
     return (
       <Screen scroll={false}>
         <View style={styles.body}>
-          <Text style={styles.title}>That pause isn't on this device.</Text>
+          <Text style={styles.title}>{"That pause isn't on this device."}</Text>
           <Button label="Back home" onPress={() => router.replace('/')} />
         </View>
       </Screen>
@@ -52,7 +52,7 @@ export default function CompleteScreen() {
         <Mark size={76} />
         <View style={styles.copy}>
           <Text style={styles.eyebrow}>Pause complete</Text>
-          <Text style={styles.title}>You're free to open the feed.</Text>
+          <Text style={styles.title}>{"You're free to open the feed."}</Text>
           <Text style={styles.bodyText}>
             This pause is logged. Opening an app is still your choice.
           </Text>

@@ -14,15 +14,12 @@ const NOTE_WINDOW_MS = 12 * 60 * 60 * 1000;
 
 export default function HomeScreen() {
   const { state, summary, week, startPause } = useApp();
-  const now = useNow(state.active != null);
+  const latest = state.sessions[0];
+  const noteOpen = !state.active && latest != null && latest.checkIn == null;
+  const now = useNow(state.active != null || noteOpen);
   const [starting, setStarting] = useState(false);
   const enabled = state.habits.filter((habit) => habit.enabled);
-  const latest = state.sessions[0];
-  const pendingNote =
-    !state.active &&
-    latest &&
-    latest.checkIn == null &&
-    Date.now() - latest.completedAt < NOTE_WINDOW_MS;
+  const pendingNote = noteOpen && latest != null && now - latest.completedAt < NOTE_WINDOW_MS;
 
   async function onStart() {
     if (starting) return;
@@ -83,7 +80,7 @@ export default function HomeScreen() {
 
       {pendingNote ? (
         <Card>
-          <Text style={styles.noteTitle}>You're free to open the feed.</Text>
+          <Text style={styles.noteTitle}>{"You're free to open the feed."}</Text>
           <Text style={styles.meta}>Noting what you did next is optional, and it stays on this phone.</Text>
           <Button
             label="Add a note"

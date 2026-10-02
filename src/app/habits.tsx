@@ -1,5 +1,5 @@
 import { Redirect } from 'expo-router';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { KeyboardAvoidingView, Platform, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 
 import { Button, Card, Screen } from '@/components/ui';
@@ -25,6 +25,7 @@ export default function HabitsScreen() {
           {state.habits.map((habit, index) => (
             <View key={habit.id} style={index > 0 ? styles.divided : undefined}>
               <HabitField
+                key={`${habit.id}:${habit.label}`}
                 habit={habit}
                 onRename={(label) => void renameHabit(habit.id, label)}
                 onToggle={(enabled) => void setHabitEnabled(habit.id, enabled)}
@@ -55,10 +56,6 @@ function HabitField({
   onRemove?: () => void;
 }) {
   const [label, setLabel] = useState(habit.label);
-
-  useEffect(() => {
-    setLabel(habit.label);
-  }, [habit.label]);
 
   function commit() {
     const trimmed = label.trim();
