@@ -19,15 +19,19 @@ import { completionDateKeys, completionRedirectId, withCompletion } from '../src
 import { dateKeyFromTimestamp } from '../src/lib/streaks.ts';
 
 describe('pause duration', () => {
-  it('clamps to the 30–90 second range on a 5 second step', () => {
+  it('clamps to the 30–180 second range on a 5 second step', () => {
+    assert.equal(MIN_PAUSE_SECONDS, 30);
+    assert.equal(MAX_PAUSE_SECONDS, 180);
+    assert.equal(DEFAULT_PAUSE_SECONDS, 45);
     assert.equal(clampPauseDuration(45), 45);
     assert.equal(clampPauseDuration(30), MIN_PAUSE_SECONDS);
-    assert.equal(clampPauseDuration(90), MAX_PAUSE_SECONDS);
+    assert.equal(clampPauseDuration(90), 90);
+    assert.equal(clampPauseDuration(180), MAX_PAUSE_SECONDS);
     assert.equal(clampPauseDuration(29), 30);
     assert.equal(clampPauseDuration(0), 30);
     assert.equal(clampPauseDuration(-10), 30);
-    assert.equal(clampPauseDuration(91), 90);
-    assert.equal(clampPauseDuration(1000), 90);
+    assert.equal(clampPauseDuration(181), 180);
+    assert.equal(clampPauseDuration(1000), 180);
     assert.equal(clampPauseDuration(42), 40);
     assert.equal(clampPauseDuration(44), 45);
     assert.equal(clampPauseDuration(48), 50);

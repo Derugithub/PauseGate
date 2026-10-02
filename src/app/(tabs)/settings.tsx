@@ -70,7 +70,7 @@ export default function SettingsScreen() {
           <View style={styles.track}>
             <View style={[styles.fill, { width: `${ratio * 100}%` }]} />
           </View>
-          <Text style={styles.help}>Between 30 and 90 seconds. The default is 45.</Text>
+          <Text style={styles.help}>Between 30 seconds and 3 minutes. The default is 45.</Text>
         </Card>
       </View>
 

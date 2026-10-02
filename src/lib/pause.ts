@@ -1,5 +1,5 @@
 export const MIN_PAUSE_SECONDS = 30;
-export const MAX_PAUSE_SECONDS = 90;
+export const MAX_PAUSE_SECONDS = 180;
 export const DEFAULT_PAUSE_SECONDS = 45;
 export const PAUSE_STEP_SECONDS = 5;
 

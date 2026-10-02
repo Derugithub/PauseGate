@@ -58,7 +58,7 @@ Splash and icon colors live in `app.json`.
 - Habit checks survive leaving and returning mid-pause.
 - Completing a pause updates today’s count and the streak, and both survive a reload.
 - “I still want to scroll” and “I’ll stay” save on the device and show in History.
-- Duration stays between 30 and 90 seconds and persists.
+- Duration stays between 30 seconds and 3 minutes and persists.
 - Habit toggles change the next pause’s stack.
 - Turning reminders on asks for permission. Denying it leaves the app usable.
 - The completion haptic fires only when that setting is on.
