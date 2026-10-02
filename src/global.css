@@ -1,0 +1,8 @@
+:root {
+  --font-display: ui-sans-serif, system-ui, sans-serif, Apple Color Emoji, Segoe UI Emoji;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  --font-rounded: ui-sans-serif, system-ui, sans-serif;
+  --font-serif: Georgia, 'Times New Roman', serif;
+  background-color: #101413;
+  color: #e7eeea;
+}

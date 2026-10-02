@@ -1,0 +1,52 @@
+{
+  "expo": {
+    "name": "PauseGate",
+    "slug": "pausegate",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/icon.png",
+    "scheme": "pausegate",
+    "userInterfaceStyle": "dark",
+    "backgroundColor": "#101413",
+    "ios": {
+      "bundleIdentifier": "app.pausegate",
+      "supportsTablet": true
+    },
+    "android": {
+      "package": "app.pausegate",
+      "adaptiveIcon": {
+        "backgroundColor": "#101413",
+        "foregroundImage": "./assets/images/android-icon-foreground.png",
+        "backgroundImage": "./assets/images/android-icon-background.png",
+        "monochromeImage": "./assets/images/android-icon-monochrome.png"
+      },
+      "predictiveBackGestureEnabled": false
+    },
+    "web": {
+      "output": "static",
+      "favicon": "./assets/images/favicon.png",
+      "backgroundColor": "#101413"
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#101413",
+          "image": "./assets/images/splash-icon.png",
+          "imageWidth": 96
+        }
+      ],
+      [
+        "expo-notifications",
+        {
+          "color": "#7ECFC2"
+        }
+      ]
+    ],
+    "experiments": {
+      "typedRoutes": true,
+      "reactCompiler": true
+    }
+  }
+}
