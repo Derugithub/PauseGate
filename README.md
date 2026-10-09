@@ -54,10 +54,10 @@ Project config is `app.json`:
 
 - Name `PauseGate`, slug `pausegate`, version `1.0.0`.
 - Orientation `portrait`, `userInterfaceStyle` `dark`.
-- Background `#101413`. Splash background `#0C0F12`, image `assets/images/splash-icon.png`, image width 96.
+- Background `#101413`. Splash background `#FFFFFF`, image `assets/images/splash-icon.png`, image width 200.
 - Scheme `pausegate`.
 - iOS bundle identifier `app.pausegate`, `supportsTablet` true.
-- Android package `app.pausegate`, adaptive icon background `#0C0F12`, `predictiveBackGestureEnabled` false.
+- Android package `app.pausegate`, adaptive icon background `#FFFFFF`, `predictiveBackGestureEnabled` false.
 - Web `output` `static`, favicon `assets/images/favicon.png`, background `#101413`.
 - Plugins: `expo-router`, `expo-splash-screen`, `expo-notifications` (color `#7ECFC2`).
 - Experiments: `typedRoutes`, `reactCompiler`.
@@ -104,7 +104,7 @@ __tests__/               Node tests for pause and streaks
 | Path | Use |
 | --- | --- |
 | `assets/images/icon.png` | App icon |
-| `assets/images/splash-icon.png` | Splash mark on `#0C0F12` |
+| `assets/images/splash-icon.png` | Splash mark on `#FFFFFF` |
 | `assets/images/android-icon-foreground.png` | Android adaptive foreground |
 | `assets/images/android-icon-background.png` | Android adaptive background |
 | `assets/images/android-icon-monochrome.png` | Android themed icon |
